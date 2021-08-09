@@ -1,18 +1,26 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Images = () => {
+  const [images, setImages] = useState([]);
+  const fetchImages = () => {
+    axios.get("http://localhost:8080/photos/all").then((res) => {
+      setImages(res.data);
+    });
+  };
 
-    const fetchImages = () => {
-        axios.get("http://localhost:8080/photos/all").then(res => 
-        console.log(res));
-    };
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
-    useEffect(() => {
-        fetchImages();
-    }, [])
-
-    return <h1>test</h1>
+  return images.map((image, index) => {
+      return (
+          <div key={index}>
+              <h1>{image.imageLink}</h1>
+              <p>{image.uuid}</p>
+          </div>
+      );
+  });
 };
 
 export default Images;
